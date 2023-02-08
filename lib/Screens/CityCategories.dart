@@ -1,10 +1,7 @@
 import 'dart:developer';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:roottrackingsystem/Screens/CategoryDetail.dart';
-import 'package:get/get.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 
 class CityCategories extends StatefulWidget {
@@ -15,187 +12,276 @@ class CityCategories extends StatefulWidget {
 
   @override
   _CityCategoriesState createState() => _CityCategoriesState();
-
 }
 
+
 class _CityCategoriesState extends State<CityCategories> {
-  Widget CustomLeft(String title){
-    String Id = "";
-
-    void getCityDocFromFirebase() async {
-      await FirebaseFirestore.instance
-          .collection(widget.cityName).doc(widget.CityId).collection(title)
-          .get()
-          .then((querySnapshot) => {
-        querySnapshot.docs.forEach((doc) => {
-          Id = doc.id,
-          log("${title}....${Id}"),
-
-          print("${doc.id}"),
-
-
-        })
-
-      });
-      print("abc...${Id}");
-    }
-    return GestureDetector(
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 10, top: 10),
-        height: 120,
-        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.teal,
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(80), topLeft: Radius.circular(80)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.teal,
-                blurRadius: 12,
-                spreadRadius: 1,
-                offset: Offset(-5.0, 5),
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 40, left: 30),
-            child: Text(
-              title,
-              style: const TextStyle(fontSize: 25, fontStyle: FontStyle.italic),
-            ),
-          ),
-        ),
-      ),
-      onTap: () {
-        getCityDocFromFirebase();
-        // Get.to(()=>CategoryDetail());
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => CategoryDetail(
-                  categoryDetail: title,  categoryDocId: Id,
-                )));
-      },
-    );
-
-  }
   @override
+  Widget build(BuildContext context) {
+
+
+    return Scaffold(
+      body: Stack(
+        children: [
+          Container(
+
+            height:  MediaQuery.of(context).size.height * .25,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color(0xff9cc6bc),
+                      Color(0xff6ca6bb),
+                      Color(0xff9cc6bc),
+
+                    ]
+                )
+            ),),
+             SafeArea(
+              child: Column(
+
+                children: <Widget>[
+                  Row(
+                    children: [
+                      GestureDetector(
+                        child: const Padding(
+                          padding:  EdgeInsets.all(10.0),
+                          child:  Icon(Icons.navigate_before,size: 40,color: Colors.black,),
+                        ),
+                        onTap:(){
+                          //Navigate to Back
+                          Navigator.pop(context);
+                        },
+                      ),
+                      const SizedBox(width:30),
+                      Text(widget.cityName,
+                        style: const TextStyle(color: Colors.black, fontSize: 35),),
+                    ],
+                  ),
+                  SizedBox(height: 40),
+                  Expanded(
+                    child: Center(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                //Marriage Hall
+                                Categorycard(
+                                    title: "Marriage Hall",
+                                    asset: "images/marriage.jpg",
+                                    cityNm: widget.cityName,
+                                    cityDocId: widget.CityId),
+                                const SizedBox(width: 10,),
+
+                                //Restaurant
+                                Categorycard(
+                                    title: "Restaurant",
+                                    asset: "images/restaurant.jpg",
+                                    cityNm: widget.cityName,
+                                    cityDocId: widget.CityId),
+
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+
+                                //SuperMart
+                                Categorycard(
+                                    title: "Super Mart",
+                                    asset: "images/supermart.jpg",
+                                    cityNm: widget.cityName,
+                                    cityDocId: widget.CityId),
+                                const SizedBox(width: 10,),
+
+                                //Shopping Mall
+
+                                Categorycard(
+                                    title: "Mall",
+                                    asset: "images/mall.jpg",
+                                    cityNm: widget.cityName,
+                                    cityDocId: widget.CityId),
+
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+
+
+                                //Hospital
+                                Categorycard(
+                                    title: "Hospital",
+                                    asset: "images/hospital.jpg",
+                                    cityNm: widget.cityName,
+                                    cityDocId: widget.CityId),
+                                const SizedBox(width: 10,),
+
+                                //University
+                                Categorycard(
+                                    title: "University",
+                                    asset: "images/university.jpg",
+                                    cityNm: widget.cityName,
+                                    cityDocId: widget.CityId),
+
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+
+                                //College
+                                Categorycard(
+                                    title: "College",
+                                    asset: "images/college.jpg",
+                                    cityNm: widget.cityName,
+                                    cityDocId: widget.CityId),
+                                const SizedBox(width: 10,),
+
+                                //Bakery
+                                Categorycard(
+                                    title: "Bakery",
+                                    asset: "images/bakery.png",
+                                    cityNm: widget.cityName,
+                                    cityDocId: widget.CityId),
+
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+
+        ],
+      )
+    );
+  }
+}
+
+//create custom class for city categories
+class Categorycard extends StatefulWidget {
+  final String asset;
+  String title = "";
+  String cityNm;
+  String cityDocId;
+
+  Categorycard(
+      {
+        required this.title,
+        required this.cityNm,
+        required this.cityDocId,
+        required this.asset,
+      });
+
+  @override
+  State<Categorycard> createState() => _CategorycardState();
+}
+
+class _CategorycardState extends State<Categorycard> {
+  String Id = "";
+
+
+  //get document ID of that city category
+
+  void getCityCategoryDocFromFirebase() async {
+    await FirebaseFirestore.instance
+        .collection(widget.cityNm)
+        .doc(widget.cityDocId)
+        .collection(widget.title)
+        .get()
+        .then((querySnapshot) => {
+      querySnapshot.docs.forEach((doc) => {
+        Id = doc.id,
+        log("${widget.title}....${Id}"),
+        print("${doc.id}"),
+      })
+    });
+    print("abc...${Id}");
+  }
+
+  @override
+
   void initState() {
     // TODO: implement initState
     super.initState();
     setState(() {
-      var hello= widget.CityId;
+      getCityCategoryDocFromFirebase();
     });
   }
-
-  @override
   Widget build(BuildContext context) {
-    //final double width = MediaQuery.of(context).size.width;
-    //final double height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        children: [
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: GestureDetector(
+            child: Container(
+              //padding:EdgeInsets.all(20),
 
-          Container(
-            height: 200,
-            decoration: const BoxDecoration(
-                color: Colors.teal,
-                borderRadius:
-                    BorderRadius.only(bottomRight: Radius.circular(60))),
-            child: Stack(
-              children: [
-                Positioned(
-                    top: 60,
-                    left: 0,
-                    child: Container(
-                      height: 80,
-                      width: 270,
-                      decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                              bottomRight: Radius.circular(50),
-                              topRight: Radius.circular(50))),
-                    )),
-                Positioned(
-                    top: 85,
-                    left: 20,
-                    child: Text(widget.cityName,
-                      style: const TextStyle(
-                          fontSize: 30,
-                          color: Colors.teal,
-                          fontWeight: FontWeight.bold),
-                    ))
-              ],
-            ),
-          ),
-          Expanded(
-              child: ListView(
-            children: [
-              CustomLeft("Marriage Hall"),
-              CustomRight(title: "University"),
-              CustomLeft("Restaurant"),
-              CustomRight(title: "Bakery"),
-              CustomLeft("Super Mart"),
-              CustomRight(title: "Mall"),
-              CustomLeft("Super Mart"),
-              CustomRight(title: "Collage"),
-            ],
-          )),
-          Text(widget.cityName),
-          Text(widget.CityId)
-        ],
-      ),
-    );
-  }
-}
-
-class CustomRight extends StatelessWidget {
-  String title = "";
-
-  CustomRight({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 10, top: 10),
-        height: 120,
-        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.teal,
-            borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(80),
-                topRight: Radius.circular(80)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.teal,
-                blurRadius: 12,
-                spreadRadius: 1,
-                offset: Offset(5.0, -5),
+              decoration: BoxDecoration(
+                color: Color(0xfff5f5f5),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                  width: 3,
+                  color: Color(0xff008080),
+                ),
               ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 40, left: 30),
-            child: Text(
-              title,
-              style: const TextStyle(fontSize: 25, fontStyle: FontStyle.italic),
+
+              child:Material(
+                color: Colors.transparent,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                          child: Container(
+                            //color: Color(0xffECEAE4),
+                              width: 130.0,
+                              height: 130.0,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10), // Image border
+                                child: SizedBox.fromSize(
+                                  size: const Size.fromRadius(45), // Image radius
+                                  child: Image.asset(widget.asset, fit: BoxFit.cover),
+                                ),
+                              )
+                          ),
+                    ),
+                    //const SizedBox(height: ,),
+
+                    Text(widget.title,
+                      style: const TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff008080),
+                        //backgroundColor: Colors.yellow[200],
+                      ),),
+                    const SizedBox(height: 4),
+                  ],
+                ),
+              ),
             ),
+              onTap:(){
+              //Navigate to category detail
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        CategoryDetail(
+                            cityCategoryDetail: widget.title,
+                            cityCategoryDocId: Id,
+                            cityNm: widget.cityNm,
+                            cityDocId: widget.cityDocId)));
+              }
           ),
         ),
-      ),
-      onTap: () {
-        // Get.to(()=>CategoryDetail());
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => CategoryDetail(
-        //               categoryDetail: title,
-        //             )));
-      },
+      ],
     );
   }
 }
