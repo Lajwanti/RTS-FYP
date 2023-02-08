@@ -38,11 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     _timer = Timer(Duration(seconds: 4), () {
-      // SOMETHING
-      //Navigator.popUntil(context, (route) => route.isFirst);
 
-      // Navigator.push(
-      //     context, MaterialPageRoute(builder: (context) => CustomTabBar()));
     });
 
     super.initState();
